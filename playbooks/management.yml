@@ -1,0 +1,25 @@
+---
+- name: Manage users
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure user 'devuser' is present
+      user:
+        name: devuser
+        state: present
+        groups: sudo
+        shell: /bin/bash
+
+    - name: Ensure 'devuser' has a home directory
+      file:
+        path: "/home/devuser"
+        state: directory
+        owner: devuser
+        group: devuser
+        mode: '0755'
+
+    - name: Add 'devuser' to the wheel group (for sudo access)
+      user:
+        name: devuser
+        groups: wheel
+        append: yes
